@@ -1,5 +1,7 @@
 package com.shark.rpc.client;
 
+import com.google.protobuf.Any;
+import com.google.protobuf.StringValue;
 import com.shark.rpc.EndPoint;
 import com.shark.rpc.protomessage.Rpc;
 
@@ -39,20 +41,24 @@ public class RpcClient {
     }
 
     public static void main(String[] args) throws Exception {
+        //建立连接
         EndPoint endPoint = new EndPoint("localhost", 8880);
         ConnManager connManager = new ConnManager();
         connManager.registerEndPoint(endPoint);
 
-        Thread.sleep(70 * 1000);
-//        RpcClient rpcClient = new RpcClient(connManager, endPoint);
-//
-//        Any params = Any.pack(StringValue.of("rpcClient"));
-//        Rpc.RpcRequest rpcRequest = Rpc.RpcRequest.newBuilder().setService("login").setMethod("say").addArgs(params).build();
-//        CompletableFuture<Rpc.RpcResponse> call = rpcClient.call(rpcRequest);
-//        Rpc.RpcResponse rpcResponse = call.get();
-//        Any result = rpcResponse.getResult();
-//        StringValue unpack = result.unpack(StringValue.class);
-//        System.out.println(unpack.getValue());
+        //构建调用
+        RpcClient rpcClient = new RpcClient(connManager, endPoint);
+        Any params = Any.pack(StringValue.of("rpcClient"));
+
+        //service login,  method say,  param rpcClient
+        Rpc.RpcRequest rpcRequest = Rpc.RpcRequest.newBuilder().setService("login").setMethod("say").addArgs(params).build();
+        CompletableFuture<Rpc.RpcResponse> call = rpcClient.call(rpcRequest);
+
+        //同步获得结果
+        Rpc.RpcResponse rpcResponse = call.get();
+        Any result = rpcResponse.getResult();
+        StringValue unpack = result.unpack(StringValue.class);
+        System.out.println(unpack.getValue());
     }
 
 }

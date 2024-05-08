@@ -55,21 +55,16 @@ public class RpcServer {
     }
 
     public static void main(String[] args) {
+        //注册服务
         RpcServiceManager rpcServiceManager = new RpcServiceManager();
         try {
             rpcServiceManager.register(new ServiceOne());
-        } catch (CannotCompileException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (CannotCompileException | NoSuchMethodException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
             throw new RuntimeException(e);
         }
 
+        //启动rpc 监听端口，
         RpcServer rpcServer = new RpcServer(8880, rpcServiceManager);
         try {
             rpcServer.start();
