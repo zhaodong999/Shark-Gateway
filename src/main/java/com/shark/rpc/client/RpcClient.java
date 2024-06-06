@@ -13,23 +13,25 @@ import java.util.concurrent.CompletableFuture;
  * 增加一个调用超时处理
  *
  * <li>
- *     暂时是单连接处理，以后变成连接池
+ * 暂时是单连接处理，以后变成连接池
  * </>
- *
  */
 public class RpcClient {
 
     private final EndPoint endPoint;
 
-    private final ConnManager connManager;
+    private RpcConnection rpcConnection;
 
-    public RpcClient(ConnManager connManager, EndPoint endPoint) {
-        this.connManager = connManager;
+    public RpcClient(EndPoint endPoint) {
         this.endPoint = endPoint;
     }
 
+    public void connect(CallBack callBack) {
+        rpcConnection = new RpcConnection(endPoint);
+        rpcConnection.connect(callBack);
+    }
+
     public CompletableFuture<Rpc.RpcResponse> call(Rpc.RpcRequest request) throws Exception {
-        RpcConnection rpcConnection = connManager.getRpcConnection(endPoint);
         if (rpcConnection == null || !rpcConnection.available()) {
             //TODO Rpc 连接不可用
             throw new Exception();
@@ -43,11 +45,11 @@ public class RpcClient {
     public static void main(String[] args) throws Exception {
         //建立连接
         EndPoint endPoint = new EndPoint("localhost", 8880);
-        ConnManager connManager = new ConnManager();
-        connManager.registerEndPoint(endPoint);
-
         //构建调用
-        RpcClient rpcClient = new RpcClient(connManager, endPoint);
+        RpcClient rpcClient = new RpcClient(endPoint);
+        rpcClient.connect(() -> {
+
+        });
         Any params = Any.pack(StringValue.of("rpcClient"));
 
         //service login,  method say,  param rpcClient

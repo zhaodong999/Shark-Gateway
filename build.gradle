@@ -11,11 +11,21 @@ repositories {
 
 dependencies {
     implementation 'io.netty:netty-all:4.1.109.Final'
+
     // https://mvnrepository.com/artifact/org.javassist/javassist
     implementation 'org.javassist:javassist:3.30.2-GA'
 
     // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
     implementation 'com.google.protobuf:protobuf-java:3.25.3'
+
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation 'com.google.guava:guava:33.2.0-jre'
+
+    implementation ('com.alibaba.nacos:nacos-client:2.1.2'){
+        exclude group:'io.grpc'
+    }
+    implementation 'com.alibaba.nacos:nacos-common:2.1.2'
+    implementation 'com.alibaba.nacos:nacos-api:2.1.2'
 
     implementation 'org.slf4j:slf4j-api:2.0.13'
     implementation 'org.apache.logging.log4j:log4j-api:2.23.1'

@@ -14,8 +14,116 @@ public final class Rpc {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
+  /**
+   * Protobuf enum {@code RpcStatus}
+   */
+  public enum RpcStatus
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>OK = 0;</code>
+     */
+    OK(0),
+    /**
+     * <code>FAILURE = 1;</code>
+     */
+    FAILURE(1),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>OK = 0;</code>
+     */
+    public static final int OK_VALUE = 0;
+    /**
+     * <code>FAILURE = 1;</code>
+     */
+    public static final int FAILURE_VALUE = 1;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @Deprecated
+    public static RpcStatus valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static RpcStatus forNumber(int value) {
+      switch (value) {
+        case 0: return OK;
+        case 1: return FAILURE;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<RpcStatus>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        RpcStatus> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<RpcStatus>() {
+            public RpcStatus findValueByNumber(int number) {
+              return RpcStatus.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return Rpc.getDescriptor().getEnumTypes().get(0);
+    }
+
+    private static final RpcStatus[] VALUES = values();
+
+    public static RpcStatus valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private RpcStatus(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:RpcStatus)
+  }
+
   public interface RpcRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.shark.rpc.protomessage.RpcRequest)
+      // @@protoc_insertion_point(interface_extends:RpcRequest)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -67,11 +175,11 @@ public final class Rpc {
         int index);
   }
   /**
-   * Protobuf type {@code com.shark.rpc.protomessage.RpcRequest}
+   * Protobuf type {@code RpcRequest}
    */
   public static final class RpcRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.shark.rpc.protomessage.RpcRequest)
+      // @@protoc_insertion_point(message_implements:RpcRequest)
       RpcRequestOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use RpcRequest.newBuilder() to construct.
@@ -98,13 +206,13 @@ public final class Rpc {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return Rpc.internal_static_com_shark_rpc_protomessage_RpcRequest_descriptor;
+      return Rpc.internal_static_RpcRequest_descriptor;
     }
 
     @Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return Rpc.internal_static_com_shark_rpc_protomessage_RpcRequest_fieldAccessorTable
+      return Rpc.internal_static_RpcRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               RpcRequest.class, Builder.class);
     }
@@ -398,26 +506,26 @@ public final class Rpc {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * Protobuf type {@code com.shark.rpc.protomessage.RpcRequest}
+     * Protobuf type {@code RpcRequest}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.shark.rpc.protomessage.RpcRequest)
+        // @@protoc_insertion_point(builder_implements:RpcRequest)
         RpcRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return Rpc.internal_static_com_shark_rpc_protomessage_RpcRequest_descriptor;
+        return Rpc.internal_static_RpcRequest_descriptor;
       }
 
       @Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return Rpc.internal_static_com_shark_rpc_protomessage_RpcRequest_fieldAccessorTable
+        return Rpc.internal_static_RpcRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 RpcRequest.class, Builder.class);
       }
@@ -428,7 +536,7 @@ public final class Rpc {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
 
       }
@@ -452,7 +560,7 @@ public final class Rpc {
       @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return Rpc.internal_static_com_shark_rpc_protomessage_RpcRequest_descriptor;
+        return Rpc.internal_static_RpcRequest_descriptor;
       }
 
       @Override
@@ -1036,10 +1144,10 @@ public final class Rpc {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.shark.rpc.protomessage.RpcRequest)
+      // @@protoc_insertion_point(builder_scope:RpcRequest)
     }
 
-    // @@protoc_insertion_point(class_scope:com.shark.rpc.protomessage.RpcRequest)
+    // @@protoc_insertion_point(class_scope:RpcRequest)
     private static final RpcRequest DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new RpcRequest();
@@ -1088,14 +1196,19 @@ public final class Rpc {
   }
 
   public interface RpcResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.shark.rpc.protomessage.RpcResponse)
+      // @@protoc_insertion_point(interface_extends:RpcResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 status = 1;</code>
+     * <code>.RpcStatus status = 1;</code>
+     * @return The enum numeric value on the wire for status.
+     */
+    int getStatusValue();
+    /**
+     * <code>.RpcStatus status = 1;</code>
      * @return The status.
      */
-    int getStatus();
+    RpcStatus getStatus();
 
     /**
      * <code>.google.protobuf.Any result = 2;</code>
@@ -1125,11 +1238,11 @@ public final class Rpc {
         getReasonBytes();
   }
   /**
-   * Protobuf type {@code com.shark.rpc.protomessage.RpcResponse}
+   * Protobuf type {@code RpcResponse}
    */
   public static final class RpcResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.shark.rpc.protomessage.RpcResponse)
+      // @@protoc_insertion_point(message_implements:RpcResponse)
       RpcResponseOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use RpcResponse.newBuilder() to construct.
@@ -1137,6 +1250,7 @@ public final class Rpc {
       super(builder);
     }
     private RpcResponse() {
+      status_ = 0;
       reason_ = "";
     }
 
@@ -1154,13 +1268,13 @@ public final class Rpc {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return Rpc.internal_static_com_shark_rpc_protomessage_RpcResponse_descriptor;
+      return Rpc.internal_static_RpcResponse_descriptor;
     }
 
     @Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return Rpc.internal_static_com_shark_rpc_protomessage_RpcResponse_fieldAccessorTable
+      return Rpc.internal_static_RpcResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               RpcResponse.class, Builder.class);
     }
@@ -1168,12 +1282,20 @@ public final class Rpc {
     public static final int STATUS_FIELD_NUMBER = 1;
     private int status_;
     /**
-     * <code>int32 status = 1;</code>
+     * <code>.RpcStatus status = 1;</code>
+     * @return The enum numeric value on the wire for status.
+     */
+    @Override public int getStatusValue() {
+      return status_;
+    }
+    /**
+     * <code>.RpcStatus status = 1;</code>
      * @return The status.
      */
-    @Override
-    public int getStatus() {
-      return status_;
+    @Override public RpcStatus getStatus() {
+      @SuppressWarnings("deprecation")
+      RpcStatus result = RpcStatus.valueOf(status_);
+      return result == null ? RpcStatus.UNRECOGNIZED : result;
     }
 
     public static final int RESULT_FIELD_NUMBER = 2;
@@ -1254,8 +1376,8 @@ public final class Rpc {
     @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (status_ != 0) {
-        output.writeInt32(1, status_);
+      if (status_ != RpcStatus.OK.getNumber()) {
+        output.writeEnum(1, status_);
       }
       if (result_ != null) {
         output.writeMessage(2, getResult());
@@ -1272,9 +1394,9 @@ public final class Rpc {
       if (size != -1) return size;
 
       size = 0;
-      if (status_ != 0) {
+      if (status_ != RpcStatus.OK.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, status_);
+          .computeEnumSize(1, status_);
       }
       if (result_ != null) {
         size += com.google.protobuf.CodedOutputStream
@@ -1298,8 +1420,7 @@ public final class Rpc {
       }
       RpcResponse other = (RpcResponse) obj;
 
-      if (getStatus()
-          != other.getStatus()) return false;
+      if (status_ != other.status_) return false;
       if (hasResult() != other.hasResult()) return false;
       if (hasResult()) {
         if (!getResult()
@@ -1319,7 +1440,7 @@ public final class Rpc {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + STATUS_FIELD_NUMBER;
-      hash = (53 * hash) + getStatus();
+      hash = (53 * hash) + status_;
       if (hasResult()) {
         hash = (37 * hash) + RESULT_FIELD_NUMBER;
         hash = (53 * hash) + getResult().hashCode();
@@ -1417,26 +1538,26 @@ public final class Rpc {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * Protobuf type {@code com.shark.rpc.protomessage.RpcResponse}
+     * Protobuf type {@code RpcResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.shark.rpc.protomessage.RpcResponse)
+        // @@protoc_insertion_point(builder_implements:RpcResponse)
         RpcResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return Rpc.internal_static_com_shark_rpc_protomessage_RpcResponse_descriptor;
+        return Rpc.internal_static_RpcResponse_descriptor;
       }
 
       @Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return Rpc.internal_static_com_shark_rpc_protomessage_RpcResponse_fieldAccessorTable
+        return Rpc.internal_static_RpcResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 RpcResponse.class, Builder.class);
       }
@@ -1447,7 +1568,7 @@ public final class Rpc {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
 
       }
@@ -1470,7 +1591,7 @@ public final class Rpc {
       @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return Rpc.internal_static_com_shark_rpc_protomessage_RpcResponse_descriptor;
+        return Rpc.internal_static_RpcResponse_descriptor;
       }
 
       @Override
@@ -1545,8 +1666,8 @@ public final class Rpc {
 
       public Builder mergeFrom(RpcResponse other) {
         if (other == RpcResponse.getDefaultInstance()) return this;
-        if (other.getStatus() != 0) {
-          setStatus(other.getStatus());
+        if (other.status_ != 0) {
+          setStatusValue(other.getStatusValue());
         }
         if (other.hasResult()) {
           mergeResult(other.getResult());
@@ -1582,7 +1703,7 @@ public final class Rpc {
                 done = true;
                 break;
               case 8: {
-                status_ = input.readInt32();
+                status_ = input.readEnum();
 
                 break;
               } // case 8
@@ -1614,28 +1735,51 @@ public final class Rpc {
         return this;
       }
 
-      private int status_ ;
+      private int status_ = 0;
       /**
-       * <code>int32 status = 1;</code>
-       * @return The status.
+       * <code>.RpcStatus status = 1;</code>
+       * @return The enum numeric value on the wire for status.
        */
-      @Override
-      public int getStatus() {
+      @Override public int getStatusValue() {
         return status_;
       }
       /**
-       * <code>int32 status = 1;</code>
-       * @param value The status to set.
+       * <code>.RpcStatus status = 1;</code>
+       * @param value The enum numeric value on the wire for status to set.
        * @return This builder for chaining.
        */
-      public Builder setStatus(int value) {
+      public Builder setStatusValue(int value) {
         
         status_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 status = 1;</code>
+       * <code>.RpcStatus status = 1;</code>
+       * @return The status.
+       */
+      @Override
+      public RpcStatus getStatus() {
+        @SuppressWarnings("deprecation")
+        RpcStatus result = RpcStatus.valueOf(status_);
+        return result == null ? RpcStatus.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.RpcStatus status = 1;</code>
+       * @param value The status to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStatus(RpcStatus value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        status_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.RpcStatus status = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearStatus() {
@@ -1852,10 +1996,10 @@ public final class Rpc {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.shark.rpc.protomessage.RpcResponse)
+      // @@protoc_insertion_point(builder_scope:RpcResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:com.shark.rpc.protomessage.RpcResponse)
+    // @@protoc_insertion_point(class_scope:RpcResponse)
     private static final RpcResponse DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new RpcResponse();
@@ -1904,15 +2048,15 @@ public final class Rpc {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_shark_rpc_protomessage_RpcRequest_descriptor;
+    internal_static_RpcRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_shark_rpc_protomessage_RpcRequest_fieldAccessorTable;
+      internal_static_RpcRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_shark_rpc_protomessage_RpcResponse_descriptor;
+    internal_static_RpcResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_shark_rpc_protomessage_RpcResponse_fieldAccessorTable;
+      internal_static_RpcResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1922,30 +2066,31 @@ public final class Rpc {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\trpc.proto\022\032com.shark.rpc.protomessage\032" +
-      "\031google/protobuf/any.proto\"Q\n\nRpcRequest" +
-      "\022\017\n\007service\030\001 \001(\t\022\016\n\006method\030\002 \001(\t\022\"\n\004arg" +
-      "s\030\003 \003(\0132\024.google.protobuf.Any\"S\n\013RpcResp" +
-      "onse\022\016\n\006status\030\001 \001(\005\022$\n\006result\030\002 \001(\0132\024.g" +
-      "oogle.protobuf.Any\022\016\n\006reason\030\003 \001(\tb\006prot" +
-      "o3"
+      "\n\trpc.proto\032\031google/protobuf/any.proto\"Q" +
+      "\n\nRpcRequest\022\017\n\007service\030\001 \001(\t\022\016\n\006method\030" +
+      "\002 \001(\t\022\"\n\004args\030\003 \003(\0132\024.google.protobuf.An" +
+      "y\"_\n\013RpcResponse\022\032\n\006status\030\001 \001(\0162\n.RpcSt" +
+      "atus\022$\n\006result\030\002 \001(\0132\024.google.protobuf.A" +
+      "ny\022\016\n\006reason\030\003 \001(\t* \n\tRpcStatus\022\006\n\002OK\020\000\022" +
+      "\013\n\007FAILURE\020\001B\034\n\032com.shark.rpc.protomessa" +
+      "geb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.google.protobuf.AnyProto.getDescriptor(),
         });
-    internal_static_com_shark_rpc_protomessage_RpcRequest_descriptor =
+    internal_static_RpcRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_com_shark_rpc_protomessage_RpcRequest_fieldAccessorTable = new
+    internal_static_RpcRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_shark_rpc_protomessage_RpcRequest_descriptor,
+        internal_static_RpcRequest_descriptor,
         new String[] { "Service", "Method", "Args", });
-    internal_static_com_shark_rpc_protomessage_RpcResponse_descriptor =
+    internal_static_RpcResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_com_shark_rpc_protomessage_RpcResponse_fieldAccessorTable = new
+    internal_static_RpcResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_shark_rpc_protomessage_RpcResponse_descriptor,
+        internal_static_RpcResponse_descriptor,
         new String[] { "Status", "Result", "Reason", });
     com.google.protobuf.AnyProto.getDescriptor();
   }

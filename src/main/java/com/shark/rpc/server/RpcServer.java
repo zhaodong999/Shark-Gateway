@@ -1,8 +1,11 @@
 package com.shark.rpc.server;
 
+import com.alibaba.nacos.api.exception.NacosException;
 import com.shark.rpc.RpcDecoder;
 import com.shark.rpc.RpcEncoder;
+import com.shark.service.RpcServiceLocator;
 import com.shark.service.ServiceOne;
+import com.shark.util.IpUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -13,18 +16,25 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import javassist.CannotCompileException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 
 public class RpcServer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RpcServer.class);
+
     private final int port;
 
-    private final RpcServiceManager rpcServiceManager;
+    private final RpcProxyManager rpcProxyManager;
 
-    public RpcServer(int port, RpcServiceManager rpcServiceManager) {
+    private final RpcServiceLocator rpcServiceLocator;
+
+    public RpcServer(int port, RpcProxyManager rpcProxyManager, RpcServiceLocator rpcServiceLocator) {
         this.port = port;
-        this.rpcServiceManager = rpcServiceManager;
+        this.rpcProxyManager = rpcProxyManager;
+        this.rpcServiceLocator = rpcServiceLocator;
     }
 
     public void start() throws InterruptedException {
@@ -42,11 +52,16 @@ public class RpcServer {
                             ch.pipeline().addLast(new RpcEncoder());
                             ch.pipeline().addLast(new RpcDecoder());
                             ch.pipeline().addLast(new IdleStateHandler(45, 0, 0));
-                            ch.pipeline().addLast(new RpcServerHandler(rpcServiceManager));
+                            ch.pipeline().addLast(new RpcServerHandler(rpcProxyManager));
                         }
                     });
 
             ChannelFuture channelFuture = bootstrap.bind(port).sync();
+            channelFuture.addListener(f -> {
+                if (f.isSuccess()) {
+                    publishService();
+                }
+            });
             channelFuture.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();
@@ -54,9 +69,21 @@ public class RpcServer {
         }
     }
 
+    private void publishService() {
+        try {
+            rpcServiceLocator.init();
+        } catch (NacosException e) {
+            LOGGER.error("connect cluster err", e);
+        }
+
+        String ip = IpUtils.getIp();
+        LOGGER.info("register service instance with {}/{}", ip, port);
+        rpcServiceLocator.registerInstance(rpcProxyManager.getServiceName(), ip, port);
+    }
+
     public static void main(String[] args) {
         //注册服务
-        RpcServiceManager rpcServiceManager = new RpcServiceManager();
+        RpcProxyManager rpcServiceManager = new RpcProxyManager();
         try {
             rpcServiceManager.register(new ServiceOne());
         } catch (CannotCompileException | NoSuchMethodException | InvocationTargetException | InstantiationException |
@@ -64,8 +91,9 @@ public class RpcServer {
             throw new RuntimeException(e);
         }
 
+        RpcServiceLocator rpcServiceLocator = new RpcServiceLocator();
         //启动rpc 监听端口，
-        RpcServer rpcServer = new RpcServer(8880, rpcServiceManager);
+        RpcServer rpcServer = new RpcServer(8880, rpcServiceManager, rpcServiceLocator);
         try {
             rpcServer.start();
         } catch (InterruptedException e) {

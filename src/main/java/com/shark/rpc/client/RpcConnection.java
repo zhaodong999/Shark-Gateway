@@ -11,6 +11,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.shark.IdUtils;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class RpcConnection {
 
@@ -41,16 +42,19 @@ public class RpcConnection {
 
     }
 
-    public void connect() {
-        bootstrap.connect(endPoint.getHost(), endPoint.getPort()).addListener((ChannelFutureListener) f -> {
+    public void connect(CallBack callBack) {
+
+        ChannelFuture channelFuture = bootstrap.connect(endPoint.getHost(), endPoint.getPort());
+        channelFuture.addListener((ChannelFutureListener) f -> {
             if (f.isSuccess()) {
                 channel = f.channel();
+                callBack.action();
             } else {
                 channel = null;
                 //TODO 2,4,8,16,32,大于一分钟要重新从2开始
                 period = period > 60 ? 2 : (long) Math.pow(period, 2);
                 Thread.sleep(period * 1000);
-                connect();
+                connect(callBack);
             }
         });
     }

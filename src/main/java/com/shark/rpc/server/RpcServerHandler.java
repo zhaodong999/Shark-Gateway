@@ -19,9 +19,9 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcMsg> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(RpcServerHandler.class);
 
-    private final RpcServiceManager rpcServiceManager;
+    private final RpcProxyManager rpcServiceManager;
 
-    public RpcServerHandler(RpcServiceManager rpcServiceManager) {
+    public RpcServerHandler(RpcProxyManager rpcServiceManager) {
         this.rpcServiceManager = rpcServiceManager;
     }
 
@@ -43,7 +43,7 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcMsg> {
 
             completableFuture.thenAccept(any -> {
                 Rpc.RpcResponse.Builder builder = Rpc.RpcResponse.newBuilder();
-                builder.setStatus(200);
+                builder.setStatus(Rpc.RpcStatus.OK);
                 builder.setResult(any);
                 builder.build();
 

@@ -1,6 +1,7 @@
 package com.shark.rpc.server;
 
 import com.google.protobuf.Any;
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.StringValue;
 import com.shark.rpc.server.annotation.RpcMethod;
@@ -16,11 +17,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
-public class RpcServiceManager {
+public class RpcProxyManager {
 
     private static final String ROOT_PATH = "com.shark.service";
 
@@ -38,6 +41,10 @@ public class RpcServiceManager {
         });
     }
 
+
+    public Set<String> getServiceName() {
+        return proxyMethods.keySet().stream().map(e -> e.serviceName).collect(Collectors.toSet());
+    }
 
     public void register(Object serviceInstance) throws CannotCompileException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Class<?> serviceClass = serviceInstance.getClass();
@@ -72,41 +79,6 @@ public class RpcServiceManager {
         }
     }
 
-    private String generateBody(Method method) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n{\n");
-
-        //generate param
-        int index = 0;
-        for (Type genericParameterType : method.getGenericParameterTypes()) {
-            if (genericParameterType.getClass().isPrimitive() || genericParameterType == String.class) {
-                unbox(sb, genericParameterType, index);
-            } else {
-
-            }
-            ++index;
-        }
-
-        //invoke method
-        index = 0;
-        sb.append(method.getReturnType().getName()).append(" result = serviceInstance.").append(method.getName()).append("(");
-        for (Type genericParameterType : method.getGenericParameterTypes()) {
-            sb.append("param").append("_").append(index);
-            ++index;
-        }
-        sb.append(");\n");
-
-        //result
-        if (method.getReturnType().isPrimitive() || method.getReturnType() == String.class) {
-            boxResult(sb, method.getReturnType());
-        }
-        sb.append("return com.google.protobuf.Any.pack(value);\n");
-        sb.append("}\n");
-
-        System.out.println(sb.toString());
-        return sb.toString();
-    }
-
     private CtClass generateClass(ServiceId serviceId, Class<?> serviceClass, Method method) throws NotFoundException, CannotCompileException {
         ClassPool classPool = ClassPool.getDefault();
         CtClass rootClass = classPool.get(ROOT_PATH + "." + SUPER_CLASS_NAME);
@@ -129,6 +101,47 @@ public class RpcServiceManager {
         return subClass;
     }
 
+    private String generateBody(Method method) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n{\n");
+
+        //generate param
+        int index = 0;
+        for (Class<?> parameterClass : method.getParameterTypes()) {
+            if (parameterClass.isPrimitive() || parameterClass == String.class) {
+                unpackPrimitive(sb, parameterClass, index);
+            } else if(GeneratedMessageV3.class.isAssignableFrom(parameterClass)){
+                unpackPb(sb, index, parameterClass.getName());
+            }
+            ++index;
+        }
+
+        //invoke method
+        if(method.getReturnType() == void.class){
+            sb.append("serviceInstance.").append(method.getName()).append("(");
+            for (int i = 0; i < method.getGenericParameterTypes().length; i++) {
+                sb.append("unpack").append("_").append(i);
+            }
+            sb.append(");\n");
+            sb.append("return null;\n");
+            sb.append("}\n");
+        }else{
+            sb.append(method.getReturnType().getName()).append(" result = serviceInstance.").append(method.getName()).append("(");
+            for (int i = 0; i < method.getGenericParameterTypes().length; i++) {
+                sb.append("param").append("_").append(i);
+            }
+            sb.append(");\n");
+
+            if (method.getReturnType().isPrimitive() || method.getReturnType() == String.class) {
+                boxResult(sb, method.getReturnType());
+            }
+            sb.append("return com.google.protobuf.Any.pack(value);\n");
+            sb.append("}\n");
+        }
+
+        return sb.toString();
+    }
+
     private void boxResult(StringBuilder sb, Class<?> returnType) {
         if (returnType == int.class) {
             box(sb, "com.google.protobuf.Int32Value");
@@ -146,19 +159,24 @@ public class RpcServiceManager {
         sb.append(pbClassName).append(".newBuilder().setValue(result).build();\n");
     }
 
-    private void unbox(StringBuilder sb, Type genericParameterType, int index) {
+    private void unpackPrimitive(StringBuilder sb, Type genericParameterType, int index) {
         if (genericParameterType == int.class) {
-            unbox(sb, index, "com.google.protobuf.Int32Value", "int");
+            unpackPrimitive(sb, index, "com.google.protobuf.Int32Value", "int");
         } else if (genericParameterType == String.class) {
-            unbox(sb, index, "com.google.protobuf.StringValue", "String");
+            unpackPrimitive(sb, index, "com.google.protobuf.StringValue", "String");
         } else if (genericParameterType == long.class) {
-            unbox(sb, index, "com.google.protobuf.Int64Value", "long");
+            unpackPrimitive(sb, index, "com.google.protobuf.Int64Value", "long");
         } else if (genericParameterType == double.class) {
-            unbox(sb, index, "com.google.protobuf.DoubleValue", "double");
+            unpackPrimitive(sb, index, "com.google.protobuf.DoubleValue", "double");
         }
     }
 
-    private void unbox(StringBuilder sb, int index, String pbClassName, String primitiveName) {
+    private void unpackPb(StringBuilder sb, int index, String pbClassName) {
+        String pbVar = "unpack_" + index;
+        sb.append(pbClassName).append(" ").append(pbVar).append(" = ").append("(").append(pbClassName).append(")").append("$1[").append(index).append("].unpack(").append(pbClassName).append(".class);\n");
+    }
+
+    private void unpackPrimitive(StringBuilder sb, int index, String pbClassName, String primitiveName) {
         String pbVar = "unpack_" + index;
         String param = "param_" + index;
         sb.append(pbClassName).append(" ").append(pbVar).append(" = ").append("(").append(pbClassName).append(")").append("$1[").append(index).append("].unpack(").append(pbClassName).append(".class);\n")
@@ -205,7 +223,7 @@ public class RpcServiceManager {
     }
 
     public static void main(String[] args) throws CannotCompileException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ExecutionException, InterruptedException {
-        RpcServiceManager rpcServiceManager = new RpcServiceManager();
+        RpcProxyManager rpcServiceManager = new RpcProxyManager();
         rpcServiceManager.register(new ServiceOne());
 
         StringValue build = StringValue.newBuilder().setValue("ttt").build();
