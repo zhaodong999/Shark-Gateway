@@ -49,19 +49,25 @@ public final class Server {
     int getQos();
 
     /**
-     * <code>.GameMsg msg = 4;</code>
-     * @return Whether the msg field is set.
+     * <code>int32 cmd = 4;</code>
+     * @return The cmd.
      */
-    boolean hasMsg();
+    int getCmd();
+
     /**
-     * <code>.GameMsg msg = 4;</code>
-     * @return The msg.
+     * <code>.google.protobuf.Any body = 5;</code>
+     * @return Whether the body field is set.
      */
-    GameMsg getMsg();
+    boolean hasBody();
     /**
-     * <code>.GameMsg msg = 4;</code>
+     * <code>.google.protobuf.Any body = 5;</code>
+     * @return The body.
      */
-    GameMsgOrBuilder getMsgOrBuilder();
+    com.google.protobuf.Any getBody();
+    /**
+     * <code>.google.protobuf.Any body = 5;</code>
+     */
+    com.google.protobuf.AnyOrBuilder getBodyOrBuilder();
   }
   /**
    * Protobuf type {@code ServerMessage}
@@ -192,30 +198,41 @@ public final class Server {
       return qos_;
     }
 
-    public static final int MSG_FIELD_NUMBER = 4;
-    private GameMsg msg_;
+    public static final int CMD_FIELD_NUMBER = 4;
+    private int cmd_;
     /**
-     * <code>.GameMsg msg = 4;</code>
-     * @return Whether the msg field is set.
+     * <code>int32 cmd = 4;</code>
+     * @return The cmd.
      */
     @Override
-    public boolean hasMsg() {
-      return msg_ != null;
+    public int getCmd() {
+      return cmd_;
+    }
+
+    public static final int BODY_FIELD_NUMBER = 5;
+    private com.google.protobuf.Any body_;
+    /**
+     * <code>.google.protobuf.Any body = 5;</code>
+     * @return Whether the body field is set.
+     */
+    @Override
+    public boolean hasBody() {
+      return body_ != null;
     }
     /**
-     * <code>.GameMsg msg = 4;</code>
-     * @return The msg.
+     * <code>.google.protobuf.Any body = 5;</code>
+     * @return The body.
      */
     @Override
-    public GameMsg getMsg() {
-      return msg_ == null ? GameMsg.getDefaultInstance() : msg_;
+    public com.google.protobuf.Any getBody() {
+      return body_ == null ? com.google.protobuf.Any.getDefaultInstance() : body_;
     }
     /**
-     * <code>.GameMsg msg = 4;</code>
+     * <code>.google.protobuf.Any body = 5;</code>
      */
     @Override
-    public GameMsgOrBuilder getMsgOrBuilder() {
-      return getMsg();
+    public com.google.protobuf.AnyOrBuilder getBodyOrBuilder() {
+      return getBody();
     }
 
     private byte memoizedIsInitialized = -1;
@@ -241,8 +258,11 @@ public final class Server {
       if (qos_ != 0) {
         output.writeInt32(3, qos_);
       }
-      if (msg_ != null) {
-        output.writeMessage(4, getMsg());
+      if (cmd_ != 0) {
+        output.writeInt32(4, cmd_);
+      }
+      if (body_ != null) {
+        output.writeMessage(5, getBody());
       }
       getUnknownFields().writeTo(output);
     }
@@ -263,9 +283,13 @@ public final class Server {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, qos_);
       }
-      if (msg_ != null) {
+      if (cmd_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getMsg());
+          .computeInt32Size(4, cmd_);
+      }
+      if (body_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, getBody());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -288,10 +312,12 @@ public final class Server {
           .equals(other.getTopic())) return false;
       if (getQos()
           != other.getQos()) return false;
-      if (hasMsg() != other.hasMsg()) return false;
-      if (hasMsg()) {
-        if (!getMsg()
-            .equals(other.getMsg())) return false;
+      if (getCmd()
+          != other.getCmd()) return false;
+      if (hasBody() != other.hasBody()) return false;
+      if (hasBody()) {
+        if (!getBody()
+            .equals(other.getBody())) return false;
       }
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
@@ -310,9 +336,11 @@ public final class Server {
       hash = (53 * hash) + getTopic().hashCode();
       hash = (37 * hash) + QOS_FIELD_NUMBER;
       hash = (53 * hash) + getQos();
-      if (hasMsg()) {
-        hash = (37 * hash) + MSG_FIELD_NUMBER;
-        hash = (53 * hash) + getMsg().hashCode();
+      hash = (37 * hash) + CMD_FIELD_NUMBER;
+      hash = (53 * hash) + getCmd();
+      if (hasBody()) {
+        hash = (37 * hash) + BODY_FIELD_NUMBER;
+        hash = (53 * hash) + getBody().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -448,11 +476,13 @@ public final class Server {
 
         qos_ = 0;
 
-        if (msgBuilder_ == null) {
-          msg_ = null;
+        cmd_ = 0;
+
+        if (bodyBuilder_ == null) {
+          body_ = null;
         } else {
-          msg_ = null;
-          msgBuilder_ = null;
+          body_ = null;
+          bodyBuilder_ = null;
         }
         return this;
       }
@@ -483,10 +513,11 @@ public final class Server {
         result.id_ = id_;
         result.topic_ = topic_;
         result.qos_ = qos_;
-        if (msgBuilder_ == null) {
-          result.msg_ = msg_;
+        result.cmd_ = cmd_;
+        if (bodyBuilder_ == null) {
+          result.body_ = body_;
         } else {
-          result.msg_ = msgBuilder_.build();
+          result.body_ = bodyBuilder_.build();
         }
         onBuilt();
         return result;
@@ -547,8 +578,11 @@ public final class Server {
         if (other.getQos() != 0) {
           setQos(other.getQos());
         }
-        if (other.hasMsg()) {
-          mergeMsg(other.getMsg());
+        if (other.getCmd() != 0) {
+          setCmd(other.getCmd());
+        }
+        if (other.hasBody()) {
+          mergeBody(other.getBody());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -591,13 +625,18 @@ public final class Server {
 
                 break;
               } // case 24
-              case 34: {
+              case 32: {
+                cmd_ = input.readInt32();
+
+                break;
+              } // case 32
+              case 42: {
                 input.readMessage(
-                    getMsgFieldBuilder().getBuilder(),
+                    getBodyFieldBuilder().getBuilder(),
                     extensionRegistry);
 
                 break;
-              } // case 34
+              } // case 42
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -797,123 +836,154 @@ public final class Server {
         return this;
       }
 
-      private GameMsg msg_;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          GameMsg, GameMsg.Builder, GameMsgOrBuilder> msgBuilder_;
+      private int cmd_ ;
       /**
-       * <code>.GameMsg msg = 4;</code>
-       * @return Whether the msg field is set.
+       * <code>int32 cmd = 4;</code>
+       * @return The cmd.
        */
-      public boolean hasMsg() {
-        return msgBuilder_ != null || msg_ != null;
+      @Override
+      public int getCmd() {
+        return cmd_;
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
-       * @return The msg.
+       * <code>int32 cmd = 4;</code>
+       * @param value The cmd to set.
+       * @return This builder for chaining.
        */
-      public GameMsg getMsg() {
-        if (msgBuilder_ == null) {
-          return msg_ == null ? GameMsg.getDefaultInstance() : msg_;
+      public Builder setCmd(int value) {
+        
+        cmd_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 cmd = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCmd() {
+        
+        cmd_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.Any body_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder> bodyBuilder_;
+      /**
+       * <code>.google.protobuf.Any body = 5;</code>
+       * @return Whether the body field is set.
+       */
+      public boolean hasBody() {
+        return bodyBuilder_ != null || body_ != null;
+      }
+      /**
+       * <code>.google.protobuf.Any body = 5;</code>
+       * @return The body.
+       */
+      public com.google.protobuf.Any getBody() {
+        if (bodyBuilder_ == null) {
+          return body_ == null ? com.google.protobuf.Any.getDefaultInstance() : body_;
         } else {
-          return msgBuilder_.getMessage();
+          return bodyBuilder_.getMessage();
         }
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
+       * <code>.google.protobuf.Any body = 5;</code>
        */
-      public Builder setMsg(GameMsg value) {
-        if (msgBuilder_ == null) {
+      public Builder setBody(com.google.protobuf.Any value) {
+        if (bodyBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          msg_ = value;
+          body_ = value;
           onChanged();
         } else {
-          msgBuilder_.setMessage(value);
+          bodyBuilder_.setMessage(value);
         }
 
         return this;
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
+       * <code>.google.protobuf.Any body = 5;</code>
        */
-      public Builder setMsg(
-          GameMsg.Builder builderForValue) {
-        if (msgBuilder_ == null) {
-          msg_ = builderForValue.build();
+      public Builder setBody(
+          com.google.protobuf.Any.Builder builderForValue) {
+        if (bodyBuilder_ == null) {
+          body_ = builderForValue.build();
           onChanged();
         } else {
-          msgBuilder_.setMessage(builderForValue.build());
+          bodyBuilder_.setMessage(builderForValue.build());
         }
 
         return this;
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
+       * <code>.google.protobuf.Any body = 5;</code>
        */
-      public Builder mergeMsg(GameMsg value) {
-        if (msgBuilder_ == null) {
-          if (msg_ != null) {
-            msg_ =
-              GameMsg.newBuilder(msg_).mergeFrom(value).buildPartial();
+      public Builder mergeBody(com.google.protobuf.Any value) {
+        if (bodyBuilder_ == null) {
+          if (body_ != null) {
+            body_ =
+              com.google.protobuf.Any.newBuilder(body_).mergeFrom(value).buildPartial();
           } else {
-            msg_ = value;
+            body_ = value;
           }
           onChanged();
         } else {
-          msgBuilder_.mergeFrom(value);
+          bodyBuilder_.mergeFrom(value);
         }
 
         return this;
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
+       * <code>.google.protobuf.Any body = 5;</code>
        */
-      public Builder clearMsg() {
-        if (msgBuilder_ == null) {
-          msg_ = null;
+      public Builder clearBody() {
+        if (bodyBuilder_ == null) {
+          body_ = null;
           onChanged();
         } else {
-          msg_ = null;
-          msgBuilder_ = null;
+          body_ = null;
+          bodyBuilder_ = null;
         }
 
         return this;
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
+       * <code>.google.protobuf.Any body = 5;</code>
        */
-      public GameMsg.Builder getMsgBuilder() {
+      public com.google.protobuf.Any.Builder getBodyBuilder() {
         
         onChanged();
-        return getMsgFieldBuilder().getBuilder();
+        return getBodyFieldBuilder().getBuilder();
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
+       * <code>.google.protobuf.Any body = 5;</code>
        */
-      public GameMsgOrBuilder getMsgOrBuilder() {
-        if (msgBuilder_ != null) {
-          return msgBuilder_.getMessageOrBuilder();
+      public com.google.protobuf.AnyOrBuilder getBodyOrBuilder() {
+        if (bodyBuilder_ != null) {
+          return bodyBuilder_.getMessageOrBuilder();
         } else {
-          return msg_ == null ?
-              GameMsg.getDefaultInstance() : msg_;
+          return body_ == null ?
+              com.google.protobuf.Any.getDefaultInstance() : body_;
         }
       }
       /**
-       * <code>.GameMsg msg = 4;</code>
+       * <code>.google.protobuf.Any body = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          GameMsg, GameMsg.Builder, GameMsgOrBuilder>
-          getMsgFieldBuilder() {
-        if (msgBuilder_ == null) {
-          msgBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              GameMsg, GameMsg.Builder, GameMsgOrBuilder>(
-                  getMsg(),
+          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder> 
+          getBodyFieldBuilder() {
+        if (bodyBuilder_ == null) {
+          bodyBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder>(
+                  getBody(),
                   getParentForChildren(),
                   isClean());
-          msg_ = null;
+          body_ = null;
         }
-        return msgBuilder_;
+        return bodyBuilder_;
       }
       @Override
       public final Builder setUnknownFields(
@@ -979,683 +1049,11 @@ public final class Server {
 
   }
 
-  public interface GameMsgOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:GameMsg)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>int32 cmd = 1;</code>
-     * @return The cmd.
-     */
-    int getCmd();
-
-    /**
-     * <code>.google.protobuf.Any body = 2;</code>
-     * @return Whether the body field is set.
-     */
-    boolean hasBody();
-    /**
-     * <code>.google.protobuf.Any body = 2;</code>
-     * @return The body.
-     */
-    com.google.protobuf.Any getBody();
-    /**
-     * <code>.google.protobuf.Any body = 2;</code>
-     */
-    com.google.protobuf.AnyOrBuilder getBodyOrBuilder();
-  }
-  /**
-   * Protobuf type {@code GameMsg}
-   */
-  public static final class GameMsg extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:GameMsg)
-      GameMsgOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use GameMsg.newBuilder() to construct.
-    private GameMsg(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private GameMsg() {
-    }
-
-    @Override
-    @SuppressWarnings({"unused"})
-    protected Object newInstance(
-        UnusedPrivateParameter unused) {
-      return new GameMsg();
-    }
-
-    @Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return Server.internal_static_GameMsg_descriptor;
-    }
-
-    @Override
-    protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return Server.internal_static_GameMsg_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              GameMsg.class, Builder.class);
-    }
-
-    public static final int CMD_FIELD_NUMBER = 1;
-    private int cmd_;
-    /**
-     * <code>int32 cmd = 1;</code>
-     * @return The cmd.
-     */
-    @Override
-    public int getCmd() {
-      return cmd_;
-    }
-
-    public static final int BODY_FIELD_NUMBER = 2;
-    private com.google.protobuf.Any body_;
-    /**
-     * <code>.google.protobuf.Any body = 2;</code>
-     * @return Whether the body field is set.
-     */
-    @Override
-    public boolean hasBody() {
-      return body_ != null;
-    }
-    /**
-     * <code>.google.protobuf.Any body = 2;</code>
-     * @return The body.
-     */
-    @Override
-    public com.google.protobuf.Any getBody() {
-      return body_ == null ? com.google.protobuf.Any.getDefaultInstance() : body_;
-    }
-    /**
-     * <code>.google.protobuf.Any body = 2;</code>
-     */
-    @Override
-    public com.google.protobuf.AnyOrBuilder getBodyOrBuilder() {
-      return getBody();
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (cmd_ != 0) {
-        output.writeInt32(1, cmd_);
-      }
-      if (body_ != null) {
-        output.writeMessage(2, getBody());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (cmd_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, cmd_);
-      }
-      if (body_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getBody());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof GameMsg)) {
-        return super.equals(obj);
-      }
-      GameMsg other = (GameMsg) obj;
-
-      if (getCmd()
-          != other.getCmd()) return false;
-      if (hasBody() != other.hasBody()) return false;
-      if (hasBody()) {
-        if (!getBody()
-            .equals(other.getBody())) return false;
-      }
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + CMD_FIELD_NUMBER;
-      hash = (53 * hash) + getCmd();
-      if (hasBody()) {
-        hash = (37 * hash) + BODY_FIELD_NUMBER;
-        hash = (53 * hash) + getBody().hashCode();
-      }
-      hash = (29 * hash) + getUnknownFields().hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static GameMsg parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static GameMsg parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static GameMsg parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static GameMsg parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static GameMsg parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static GameMsg parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static GameMsg parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static GameMsg parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static GameMsg parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static GameMsg parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static GameMsg parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static GameMsg parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(GameMsg prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @Override
-    protected Builder newBuilderForType(
-        BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code GameMsg}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:GameMsg)
-        GameMsgOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return Server.internal_static_GameMsg_descriptor;
-      }
-
-      @Override
-      protected FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return Server.internal_static_GameMsg_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                GameMsg.class, Builder.class);
-      }
-
-      // Construct using com.shark.server.msg.Server.GameMsg.newBuilder()
-      private Builder() {
-
-      }
-
-      private Builder(
-          BuilderParent parent) {
-        super(parent);
-
-      }
-      @Override
-      public Builder clear() {
-        super.clear();
-        cmd_ = 0;
-
-        if (bodyBuilder_ == null) {
-          body_ = null;
-        } else {
-          body_ = null;
-          bodyBuilder_ = null;
-        }
-        return this;
-      }
-
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return Server.internal_static_GameMsg_descriptor;
-      }
-
-      @Override
-      public GameMsg getDefaultInstanceForType() {
-        return GameMsg.getDefaultInstance();
-      }
-
-      @Override
-      public GameMsg build() {
-        GameMsg result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @Override
-      public GameMsg buildPartial() {
-        GameMsg result = new GameMsg(this);
-        result.cmd_ = cmd_;
-        if (bodyBuilder_ == null) {
-          result.body_ = body_;
-        } else {
-          result.body_ = bodyBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      @Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return super.setField(field, value);
-      }
-      @Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return super.addRepeatedField(field, value);
-      }
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof GameMsg) {
-          return mergeFrom((GameMsg)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(GameMsg other) {
-        if (other == GameMsg.getDefaultInstance()) return this;
-        if (other.getCmd() != 0) {
-          setCmd(other.getCmd());
-        }
-        if (other.hasBody()) {
-          mergeBody(other.getBody());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        onChanged();
-        return this;
-      }
-
-      @Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new NullPointerException();
-        }
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 8: {
-                cmd_ = input.readInt32();
-
-                break;
-              } // case 8
-              case 18: {
-                input.readMessage(
-                    getBodyFieldBuilder().getBuilder(),
-                    extensionRegistry);
-
-                break;
-              } // case 18
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.unwrapIOException();
-        } finally {
-          onChanged();
-        } // finally
-        return this;
-      }
-
-      private int cmd_ ;
-      /**
-       * <code>int32 cmd = 1;</code>
-       * @return The cmd.
-       */
-      @Override
-      public int getCmd() {
-        return cmd_;
-      }
-      /**
-       * <code>int32 cmd = 1;</code>
-       * @param value The cmd to set.
-       * @return This builder for chaining.
-       */
-      public Builder setCmd(int value) {
-        
-        cmd_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 cmd = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearCmd() {
-        
-        cmd_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.Any body_;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder> bodyBuilder_;
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       * @return Whether the body field is set.
-       */
-      public boolean hasBody() {
-        return bodyBuilder_ != null || body_ != null;
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       * @return The body.
-       */
-      public com.google.protobuf.Any getBody() {
-        if (bodyBuilder_ == null) {
-          return body_ == null ? com.google.protobuf.Any.getDefaultInstance() : body_;
-        } else {
-          return bodyBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       */
-      public Builder setBody(com.google.protobuf.Any value) {
-        if (bodyBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          body_ = value;
-          onChanged();
-        } else {
-          bodyBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       */
-      public Builder setBody(
-          com.google.protobuf.Any.Builder builderForValue) {
-        if (bodyBuilder_ == null) {
-          body_ = builderForValue.build();
-          onChanged();
-        } else {
-          bodyBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       */
-      public Builder mergeBody(com.google.protobuf.Any value) {
-        if (bodyBuilder_ == null) {
-          if (body_ != null) {
-            body_ =
-              com.google.protobuf.Any.newBuilder(body_).mergeFrom(value).buildPartial();
-          } else {
-            body_ = value;
-          }
-          onChanged();
-        } else {
-          bodyBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       */
-      public Builder clearBody() {
-        if (bodyBuilder_ == null) {
-          body_ = null;
-          onChanged();
-        } else {
-          body_ = null;
-          bodyBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       */
-      public com.google.protobuf.Any.Builder getBodyBuilder() {
-        
-        onChanged();
-        return getBodyFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       */
-      public com.google.protobuf.AnyOrBuilder getBodyOrBuilder() {
-        if (bodyBuilder_ != null) {
-          return bodyBuilder_.getMessageOrBuilder();
-        } else {
-          return body_ == null ?
-              com.google.protobuf.Any.getDefaultInstance() : body_;
-        }
-      }
-      /**
-       * <code>.google.protobuf.Any body = 2;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder> 
-          getBodyFieldBuilder() {
-        if (bodyBuilder_ == null) {
-          bodyBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder>(
-                  getBody(),
-                  getParentForChildren(),
-                  isClean());
-          body_ = null;
-        }
-        return bodyBuilder_;
-      }
-      @Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      @Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:GameMsg)
-    }
-
-    // @@protoc_insertion_point(class_scope:GameMsg)
-    private static final GameMsg DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new GameMsg();
-    }
-
-    public static GameMsg getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<GameMsg>
-        PARSER = new com.google.protobuf.AbstractParser<GameMsg>() {
-      @Override
-      public GameMsg parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
-      }
-    };
-
-    public static com.google.protobuf.Parser<GameMsg> parser() {
-      return PARSER;
-    }
-
-    @Override
-    public com.google.protobuf.Parser<GameMsg> getParserForType() {
-      return PARSER;
-    }
-
-    @Override
-    public GameMsg getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ServerMessage_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ServerMessage_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_GameMsg_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_GameMsg_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1666,11 +1064,10 @@ public final class Server {
   static {
     String[] descriptorData = {
       "\n\014server.proto\032\031google/protobuf/any.prot" +
-      "o\"N\n\rServerMessage\022\n\n\002id\030\001 \001(\t\022\r\n\005topic\030" +
-      "\002 \001(\t\022\013\n\003qos\030\003 \001(\005\022\025\n\003msg\030\004 \001(\0132\010.GameMs" +
-      "g\":\n\007GameMsg\022\013\n\003cmd\030\001 \001(\005\022\"\n\004body\030\002 \001(\0132" +
-      "\024.google.protobuf.AnyB\026\n\024com.shark.serve" +
-      "r.msgb\006proto3"
+      "o\"h\n\rServerMessage\022\n\n\002id\030\001 \001(\t\022\r\n\005topic\030" +
+      "\002 \001(\t\022\013\n\003qos\030\003 \001(\005\022\013\n\003cmd\030\004 \001(\005\022\"\n\004body\030" +
+      "\005 \001(\0132\024.google.protobuf.AnyB\026\n\024com.shark" +
+      ".server.msgb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1682,13 +1079,7 @@ public final class Server {
     internal_static_ServerMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ServerMessage_descriptor,
-        new String[] { "Id", "Topic", "Qos", "Msg", });
-    internal_static_GameMsg_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_GameMsg_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_GameMsg_descriptor,
-        new String[] { "Cmd", "Body", });
+        new String[] { "Id", "Topic", "Qos", "Cmd", "Body", });
     com.google.protobuf.AnyProto.getDescriptor();
   }
 

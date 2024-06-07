@@ -42,7 +42,7 @@ public class RpcProxyManager {
     }
 
 
-    public Set<String> getServiceName() {
+    public Set<String> getServiceNames() {
         return proxyMethods.keySet().stream().map(e -> e.serviceName).collect(Collectors.toSet());
     }
 

@@ -45,17 +45,16 @@ public class RpcServiceLocator extends Observable implements Closeable {
         for (String serviceName : serviceNames) {
             try {
                 namingService.registerInstance(serviceName, ip, port);
+                LOGGER.info("register service: {}\t{}\t{}", serviceName, ip, port);
             } catch (NacosException e) {
                 LOGGER.error("register service err", e);
             }
         }
     }
 
-    public void init() throws NacosException {
-        connectCluster();
-        pollLoadNewService();
-
+    public void loadServices() throws NacosException {
         LOGGER.info("start schedule");
+        pollLoadNewService();
         service = Executors.newSingleThreadScheduledExecutor();
         service.scheduleAtFixedRate(() -> {
             try {
@@ -63,17 +62,13 @@ public class RpcServiceLocator extends Observable implements Closeable {
             } catch (Exception e) {
                 LOGGER.error("poll instances err", e);
             }
-        }, 20, 10, TimeUnit.SECONDS);
-
-        LOGGER.info("stop schedule");
+        }, 10, 10, TimeUnit.SECONDS);
     }
 
     private void pollLoadNewService() {
-        LOGGER.info("poll service");
         int page = 1;
         while (true) {
             try {
-                LOGGER.info("poll service page");
                 ListView<String> servicesOfServer = namingService.getServicesOfServer(page, PAGE_SIZE);
                 if (servicesOfServer.getCount() == 0) {
                     break;
@@ -113,8 +108,7 @@ public class RpcServiceLocator extends Observable implements Closeable {
 
 
     public static void main(String[] args) throws Exception {
-        RpcService rpcService = RpcServiceServant.getService("login");
-        RpcClient rpcClient = rpcService.getRpcClient(BalanceType.Hash, "userId_011");
+        RpcClient rpcClient = RpcClusterFactory.getRpcClient("login", BalanceType.Hash, "userId_011");
 
         Any params = Any.pack(StringValue.of("rpcClient"));
         Rpc.RpcRequest rpcRequest = Rpc.RpcRequest.newBuilder().setService("login").setMethod("say").addArgs(params).build();
@@ -129,7 +123,7 @@ public class RpcServiceLocator extends Observable implements Closeable {
     }
 
     public List<Instance> getInstance(String name) {
-        return null;
+        return serviceInstances.get(name);
     }
 
 

@@ -9,16 +9,20 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.shark.gateway.AttrKey.SERVER_MSG_ID;
 
 @RpcService(name = "gate")
 public class SendService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SendService.class);
+
     @RpcMethod(name = "publish")
     public void sendMsg(Server.ServerMessage serverMessage) {
-        Server.GameMsg gameMsg = serverMessage.getMsg();
-        byte[] body = gameMsg.toByteArray();
+        LOGGER.info("receive: {}\t{}", serverMessage.getId(), serverMessage.getTopic());
+        byte[] body = serverMessage.toByteArray();
 
         //get connection channel
         ChannelHandlerContext ctx = ConnectionManager.getCtx(serverMessage.getId());

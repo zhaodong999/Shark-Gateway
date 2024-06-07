@@ -71,14 +71,12 @@ public class RpcServer {
 
     private void publishService() {
         try {
-            rpcServiceLocator.init();
+            rpcServiceLocator.loadServices();
         } catch (NacosException e) {
             LOGGER.error("connect cluster err", e);
         }
 
-        String ip = IpUtils.getIp();
-        LOGGER.info("register service instance with {}/{}", ip, port);
-        rpcServiceLocator.registerInstance(rpcProxyManager.getServiceName(), ip, port);
+        rpcServiceLocator.registerInstance(rpcProxyManager.getServiceNames(), IpUtils.getIp(), port);
     }
 
     public static void main(String[] args) {
@@ -91,6 +89,7 @@ public class RpcServer {
             throw new RuntimeException(e);
         }
 
+        String ip = IpUtils.getIp();
         RpcServiceLocator rpcServiceLocator = new RpcServiceLocator();
         //启动rpc 监听端口，
         RpcServer rpcServer = new RpcServer(8880, rpcServiceManager, rpcServiceLocator);

@@ -1,16 +1,24 @@
 package com.shark.server;
 
 import com.alibaba.nacos.api.exception.NacosException;
+import com.shark.gateway.SendService;
 import com.shark.service.RpcServiceLocator;
 import com.shark.gateway.MqttServer;
+import com.shark.util.IpUtils;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GateWayServer {
 
     private void start(int port) {
+        String ip = IpUtils.getIp();
         try (RpcServiceLocator rpcServiceLocator = new RpcServiceLocator()) {
-            rpcServiceLocator.init();
+            rpcServiceLocator.connectCluster();
+            Set<String> serviceNames = new HashSet<>();
+//            rpcServiceLocator.registerInstance(serviceNames);
+            rpcServiceLocator.loadServices();
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {

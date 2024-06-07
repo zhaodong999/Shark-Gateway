@@ -6,6 +6,10 @@ public class EndPoint {
     private String host;
     private int port;
 
+    public static EndPoint of(String host, int port) {
+        return new EndPoint(host, port);
+    }
+
     public EndPoint(String host, int port) {
         this.host = host;
         this.port = port;

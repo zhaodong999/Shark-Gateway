@@ -7,6 +7,8 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.shark.rpc.EndPoint;
 import com.shark.rpc.client.RpcClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -14,7 +16,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class RpcService implements Observer {
+public class RpcCluster implements Observer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RpcCluster.class);
 
     private String name;
 
@@ -22,13 +26,14 @@ public class RpcService implements Observer {
 
     private final CopyOnWriteArrayList<RpcClient> rpcClients = new CopyOnWriteArrayList<>();
 
-    public RpcService(String name, RpcServiceLocator rpcServiceLocator) {
+    public RpcCluster(String name, RpcServiceLocator rpcServiceLocator) {
         this.name = name;
         this.rpcServiceLocator = rpcServiceLocator;
 
         List<Instance> rpcInstances = this.rpcServiceLocator.getInstance(name);
         if (rpcInstances != null && !rpcInstances.isEmpty()) {
             for (Instance instance : rpcInstances) {
+                LOGGER.info("add rpc client: {}\t{}", name, instance);
                 initRpcClient(instance);
             }
         }
@@ -37,11 +42,9 @@ public class RpcService implements Observer {
     }
 
     private void initRpcClient(Instance instance) {
-        EndPoint endPoint = new EndPoint(instance.getIp(), instance.getPort());
-        RpcClient rpcClient = new RpcClient(endPoint);
-        rpcClient.connect(() -> {
-            rpcClients.add(rpcClient);
-        });
+        EndPoint endPoint = EndPoint.of(instance.getIp(), instance.getPort());
+        RpcClient rpcClient = RpcClientFactory.getRpcClient(endPoint);
+        rpcClients.add(rpcClient);
     }
 
     public RpcClient getRpcClient(BalanceType hash, String id) {

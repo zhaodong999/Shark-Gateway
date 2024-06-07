@@ -39,7 +39,6 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<RpcMsg> {
             Rpc.RpcResponse rpcResponse = Rpc.RpcResponse.parseFrom(payLoad);
             callBack.complete(rpcResponse);
         }
-
     }
 
     @Override
